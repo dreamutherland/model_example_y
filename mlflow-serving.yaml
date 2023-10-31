@@ -1,0 +1,75 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: model-example-y-api-deployment
+  namespace: mlserve-model-example-y
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: model-example-y-api
+  template:
+    metadata:
+      labels:
+        app: model-example-y-api
+    spec:
+      containers:
+      - name: model-example-y-api
+        image: jleighsutherland/model_example_y_api:v8
+        ports:
+        - containerPort: 5000
+        
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: model-example-y-ui-deployment
+  namespace: mlserve-model-example-y
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: model-example-y-ui
+  template:
+    metadata:
+      labels:
+        app: model-example-y-ui
+    spec:
+      containers:
+      - name: model-example-y-ui
+        image: jleighsutherland/model_example_y_ui:v8
+        ports:
+        - containerPort: 7860
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: model-example-y-api-service
+  namespace: mlserve-model-example-y
+spec:
+  selector:
+    app: model-example-y-api
+  ports:
+    - name: api
+      protocol: TCP
+      port: 5000
+      targetPort: 5000
+  type: NodePort  
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: model-example-y-ui-service
+  namespace: mlserve-model-example-y
+spec:
+  selector:
+    app: model-example-y-ui
+  ports:
+    - name: ui
+      protocol: TCP
+      port: 7860
+      targetPort: 7860
+  type: NodePort  
