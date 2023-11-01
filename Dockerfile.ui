@@ -6,8 +6,6 @@ COPY model /app/model
 
 COPY gradio-serving.py /app/gradio-serving.py
 
-COPY entrypoint.sh /app/entrypoint.sh
-
 RUN pip install -r model/requirements.txt
 
 EXPOSE 7860
